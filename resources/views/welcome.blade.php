@@ -381,7 +381,7 @@
                     </div>
                     <div class="tab">
                         <span class="dot green"></span>
-                        <span>Miranda, Renan James Z...</span>
+                        <span>Monkey D. Luffy...</span>
                     </div>
                 </div>
 
@@ -480,7 +480,7 @@
 
                                     <pre><span class="token-cmt">// Pseudo-code inspired by a file viewer mockup</span>
 <span class="token-key">const</span> <span class="token-var">student</span> = {
-  <span class="token-attr">name</span>: <span class="token-str">"Miranda, Renan James Z."</span>,
+  <span class="token-attr">name</span>: <span class="token-str">"Monkey D. Luffy"</span>,
   <span class="token-attr">grade</span>: <span class="token-num">97</span>,
   <span class="token-attr">performance</span>: <span class="token-str">"Excellent"</span>,
   <span class="token-attr">subjects</span>: [<span class="token-str">"Math"</span>, <span class="token-str">"Programming"</span>, <span class="token-str">"Science"</span>]

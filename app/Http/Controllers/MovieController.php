@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Genre;
 use App\Models\Movie;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class MovieController extends Controller
 {
@@ -39,7 +40,7 @@ class MovieController extends Controller
             $query->where('director', $director);
         }
 
-        $movies = $query->with('genres')->get();
+        $movies = $query->withh('genres')->get();
 
         return view('movies.index', [
             'movies' => $movies,
@@ -67,6 +68,9 @@ class MovieController extends Controller
 
         $movie = Movie::create($validated);
         $movie->genres()->sync($genreIds);
+        Log::info('Movie saved', [
+            'id' => $movie->id,
+        ]);
 
         return redirect()->route('movies.index')->with('success', 'Movie added successfully.');
     }
@@ -100,6 +104,8 @@ class MovieController extends Controller
 
     public function destroy(Movie $movie)
     {
+        abort_if($movie->genres()->whereHas('movies', null, '=', 1)->exists(), 403);
+
         $movie->delete();
 
         return redirect()->route('movies.index')->with('success', 'Movie deleted successfully.');

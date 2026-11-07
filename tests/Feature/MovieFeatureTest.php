@@ -138,12 +138,40 @@ class MovieFeatureTest extends TestCase
             'image_url' => 'https://example.com/delete.jpg',
         ]);
         $movie->genres()->attach($action);
+        $otherMovie = Movie::create([
+            'title' => 'Another action movie',
+            'director' => 'Another Director',
+            'rating' => '7/10',
+            'year' => 2021,
+            'image_url' => 'https://example.com/another-action.jpg',
+        ]);
+        $otherMovie->genres()->attach($action);
 
         $response = $this->delete(route('movies.destroy', $movie));
 
         $response->assertRedirect(route('movies.index'));
         $this->assertDatabaseMissing('movies', ['id' => $movie->id]);
         $this->assertDatabaseMissing('genre_movie', ['movie_id' => $movie->id]);
+    }
+
+    public function test_destroy_refuses_to_delete_the_last_movie_in_a_genre(): void
+    {
+        $drama = Genre::where('name', 'Drama')->firstOrFail();
+        $movie = Movie::create([
+            'title' => 'Only drama movie',
+            'director' => 'Director',
+            'rating' => '7/10',
+            'year' => 2020,
+            'image_url' => 'https://example.com/only-drama.jpg',
+        ]);
+        $movie->genres()->attach($drama);
+
+        $response = $this->delete(route('movies.destroy', $movie));
+
+        $response->assertForbidden()
+            ->assertSee('403')
+            ->assertSee('FORBIDDEN');
+        $this->assertDatabaseHas('movies', ['id' => $movie->id]);
     }
 
     public function test_store_saves_movie_and_redirects(): void
